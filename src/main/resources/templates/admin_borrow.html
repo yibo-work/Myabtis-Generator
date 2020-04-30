@@ -58,9 +58,6 @@
                        th:href="'/admin/list.do'+'?page='+${list.getPrePage()}">上一页</a>
                     <a th:if="${list.hasNextPage}"
                        th:href="'/admin/list.do'+'?page='+${list.getNextPage()}">下一页</a>
-                    &nbsp;
-                    &nbsp;
-                    &nbsp;
                     <span><span th:text="${list.getPageNum()}"></span>/<span th:text="${list.getPages()}"></span></span>
                 </td>
             </tr>
