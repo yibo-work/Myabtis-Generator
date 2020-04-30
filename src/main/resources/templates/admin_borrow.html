@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>申请情况</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/lib/css/homepage.css">
+    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<div th:include="../static/common/headbar::headbar"></div>
+<div th:include="./detail_admin::homepage"></div>
+
+<div class="panel panel-default" style="width: 90%;margin-left: 5%">
+    <div class="panel-heading">
+        <h3 class="panel-title" style="text-align:center">借阅情况</h3>
+    </div>
+    <div class="panel-body">
+        <table class="table table-hover" style="text-align:center">
+            <thead>
+            <tr>
+                <th>失物号</th>
+                <th>认领人</th>
+                <th>失物名</th>
+                <th>手机号码</th>
+                <th>失物描述</th>
+                <th>申请日期</th>
+                <th>认领状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="res: ${list.list}">
+                <td th:text="${res.lostNo} "></td>
+                <td th:text="${res.userName}"></td>
+                <td th:text="${res.getLostName()}"></td>
+                <td th:text="${res.getUserPhone()}"></td>
+                <td th:text="${res.getDescription()}"></td>
+                <td th:text="${res.getCreateTimeString()}"></td>
+                <td th:text="${res.getStatusString()}"></td>
+                <td th:if="${res.status == 0}">
+                    <a th:href="'/admin/ok.do/'+${res.id}">
+                        <button type="button" class="btn btn-primary">同意</button>
+                    </a>
+                    <a th:href="'/admin/refuse.do/'+${res.id}">
+                        <button type="button" class="btn btn-primary">拒绝</button>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="8">
+                    <a th:if="${list.hasPreviousPage}"
+                       th:href="'/admin/list.do'+'?page='+${list.getPrePage()}">上一页</a>
+                    <a th:if="${list.hasNextPage}"
+                       th:href="'/admin/list.do'+'?page='+${list.getNextPage()}">下一页</a>
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    <span><span th:text="${list.getPageNum()}"></span>/<span th:text="${list.getPages()}"></span></span>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+
+</body>
+</html>

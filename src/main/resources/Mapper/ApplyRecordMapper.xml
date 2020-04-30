@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lost.dao.ApplyRecordMapper">
+
+    <select id="findById" resultType="com.lost.model.ApplyRecord">
+        select `id`,`lost_no`,`lost_id`,`user_id`,`user_name`,`user_phone`,`lost_name`,`description`,`status`,`create_time`,`is_del` from apply_record
+        where id = #{value}
+                    and is_del = 0
+    </select>
+
+    <select id="findByMap" resultType="com.lost.model.ApplyRecord">
+        select `id`,`lost_no`,`lost_id`,`user_id`,`user_name`,`user_phone`,`lost_name`,`description`,`status`,`create_time`,`is_del` from apply_record
+        <where>
+            <if test="id != null and id != ''"> and id = #{id} </if>
+            <if test="lostNo != null and lostNo != ''"> and lost_no = #{lostNo} </if>
+            <if test="lostId != null and lostId != ''"> and lost_id = #{lostId} </if>
+            <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
+            <if test="userName != null and userName != ''"> and user_name = #{userName} </if>
+            <if test="userPhone != null and userPhone != ''"> and user_phone = #{userPhone} </if>
+            <if test="lostName != null and lostName != ''"> and lost_name = #{lostName} </if>
+            <if test="description != null and description != ''"> and description = #{description} </if>
+            <if test="status != null and status != ''"> and status = #{status} </if>
+            <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+            <if test="isDel != null and isDel != ''"> and is_del = #{isDel} </if>
+            and is_del = 0
+        </where>
+        order by id desc limit 1
+    </select>
+
+    <select id="list" resultType="com.lost.model.ApplyRecord">
+        select `id`,`lost_no`,`lost_id`,`user_id`,`user_name`,`user_phone`,`lost_name`,`description`,`status`,`create_time`,`is_del` from apply_record
+        <where>
+            <if test="id != null and id != ''">and id = #{id}</if>
+            <if test="lostNo != null and lostNo != ''">and lost_no = #{lostNo}</if>
+            <if test="lostId != null and lostId != ''">and lost_id = #{lostId}</if>
+            <if test="userId != null and userId != ''">and user_id = #{userId}</if>
+            <if test="userName != null and userName != ''">and user_name = #{userName}</if>
+            <if test="userPhone != null and userPhone != ''">and user_phone = #{userPhone}</if>
+            <if test="lostName != null and lostName != ''">and lost_name = #{lostName}</if>
+            <if test="description != null and description != ''">and description = #{description}</if>
+            <if test="status != null and status != ''">and status = #{status}</if>
+            <if test="createTime != null and createTime != ''">and create_time = #{createTime}</if>
+            <if test="isDel != null and isDel != ''">and is_del = #{isDel}</if>
+            and is_del = 0
+        </where>
+        <choose>
+            <when test="sortColumn != null and sortColumn.trim() != ''">
+                order by ${sortColumn} ${orderBy}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.lost.model.ApplyRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into apply_record
+        (
+            <if test="lostNo != null">`lost_no`,</if>
+            <if test="lostId != null">`lost_id`,</if>
+            <if test="userId != null">`user_id`,</if>
+            <if test="userName != null">`user_name`,</if>
+            <if test="userPhone != null">`user_phone`,</if>
+            <if test="lostName != null">`lost_name`,</if>
+            <if test="description != null">`description`,</if>
+            <if test="status != null">`status`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            `is_del`
+        )
+        values
+        (
+            <if test="lostNo != null">#{lostNo},</if>
+            <if test="lostId != null">#{lostId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="userPhone != null">#{userPhone},</if>
+            <if test="lostName != null">#{lostName},</if>
+            <if test="description != null">#{description},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+            0
+        )
+    </insert>
+
+    <update id="update" parameterType="com.lost.model.ApplyRecord">
+        update apply_record
+        <set>
+            <if test="lostNo != null">`lost_no` = #{lostNo},</if>
+            <if test="lostId != null">`lost_id` = #{lostId},</if>
+            <if test="userId != null">`user_id` = #{userId},</if>
+            <if test="userName != null">`user_name` = #{userName},</if>
+            <if test="userPhone != null">`user_phone` = #{userPhone},</if>
+            <if test="lostName != null">`lost_name` = #{lostName},</if>
+            <if test="description != null">`description` = #{description},</if>
+            <if test="status != null">`status` = #{status},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="isDel != null">`is_del` = #{isDel}</if>
+        </set>
+        where id = #{id} and is_del = 0
+    </update>
+
+    <delete id="delete">
+        update apply_record
+        <set>
+            is_del = 1
+        </set>
+        where id = #{value}
+    </delete>
+
+
+</mapper>

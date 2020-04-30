@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>添加失物</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/lib/css/homepage.css">
+    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<div th:include="../static/common/headbar::headbar"></div>
+<div th:include="./detail_admin::homepage"></div>
+<div style="padding: 20px 550px 10px">
+    <button class="btn btn-success"
+            data-toggle="modal" data-target="#add">上传失物
+    </button>
+<!--    <button class="btn btn-danger"-->
+<!--            data-toggle="modal" data-target="#delete">删除失物-->
+<!--    </button>-->
+</div>
+
+<!-- 添加失物窗口 -->
+<div id="add" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-title">
+                <h1 class="text-center">上传失物</h1>
+            </div>
+            <div class="modal-body">
+                <form id="form-login">
+                    <div class="form-group has-feedback">
+                        <label for="ad-isbn">isbn</label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-phone"></span></span>
+                            <input id="ad-isbn" class="form-control" placeholder="请输入ISBN" maxlength="13" type="text">
+                        </div>
+                        <span style="color:red;display: none;" class="tips"></span>
+                        <span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                        <span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                    </div>
+
+                    <div class="form-group has-feedback">
+                        <label for="ad-name">失物名</label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-book"></span></span>
+                            <input id="ad-name" class="form-control" placeholder="请输入失物名字" maxlength="20">
+                        </div>
+
+                        <span style="color:red;display: none;" class="tips"></span>
+                        <span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                        <span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                    </div>
+
+                    <div class="form-group has-feedback">
+                        <label for="ad-address">遗失地点</label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-info-sign"></span></span>
+                            <input id="ad-address" class="form-control" placeholder="请输入遗失地点" maxlength="10">
+                        </div>
+
+                        <span style="color:red;display: none;" class="tips"></span>
+                        <span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                        <span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                    </div>
+
+
+                    <div class="form-group has-feedback">
+                        <label for="ad-ptime">拾物时间</label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                            <input id="ad-ptime" class="form-control" placeholder="请输入拾物时间" maxlength="10">
+                        </div>
+
+                        <span style="color:red;display: none;" class="tips"></span>
+                        <span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                        <span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <div class="text-right">
+                            <button class="btn btn-primary" type="button" id="btn-add">添加</button>
+                            <button class="btn btn-danger" data-dismiss="modal">取消</button>
+                        </div>
+
+
+                        <span style="color:red;display: none;" class="tips"></span>
+                        <span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                        <span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="delete" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-title">
+                <h1 class="text-center">删除失物</h1>
+            </div>
+            <div class="modal-body">
+                <form id="form-delete">
+                    <div class="form-group has-feedback">
+                        <label for="dl-isbn">isbn</label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-phone"></span></span>
+                            <input id="dl-isbn" class="form-control" placeholder="请输入ISBN" maxlength="13" type="text">
+                        </div>
+                        <span style="color:red;display: none;" class="tips"></span>
+                        <span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                        <span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                    </div>
+
+                    <div class="text-right">
+                        <button class="btn btn-primary" type="button" id="btn-delete">删除</button>
+                        <button class="btn btn-danger" data-dismiss="modal">取消</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default" style="width: 90%;margin-left: 5%">
+    <div class="panel-heading">
+        <h3 class="panel-title" style="text-align:center">失物信息</h3>
+    </div>
+    <div class="panel-body">
+        <table class="table table-hover" style="text-align:center">
+            <thead>
+            <tr>
+                <th>isbn</th>
+                <th>失物名</th>
+                <th>遗失地点</th>
+                <th>拾物时间</th>
+                <th>认领状态</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="lost: ${list.list}">
+                <td th:text="${lost.lostNo}"></td>
+                <td th:text="${lost.lostName}"></td>
+                <td th:text="${lost.address}"></td>
+                <td th:text="${lost.getCreateTimeString()}"></td>
+                <td th:text="${lost.getStatusString()}"></td></tr>
+            </tbody>
+            <tfoot>
+            <tr style="text-align: center">
+                <td colspan="5">
+                    <a th:if="${list.hasPreviousPage}"
+                       th:href="'/admin/addLost'+'?page='+${list.getPrePage()}">上一页</a>
+                    <a th:if="${list.hasNextPage}"
+                       th:href="'/admin/addLost'+'?page='+${list.getNextPage()}">下一页</a>
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    <span><span th:text="${list.getPageNum()}"></span>/<span th:text="${list.getPages()}"></span></span>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+<script src="/static/lib/js/check.js"></script>
+</body>
+</html>

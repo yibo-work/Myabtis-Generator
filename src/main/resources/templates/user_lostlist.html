@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>认领失物</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/lib/css/homepage.css">
+    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <style>
+        .comment-div {
+            margin-left: 10px;
+        }
+
+        .comment-nickname {
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .comment-content {
+            font-size: 12px;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            padding-left: 5px;
+            font-weight: normal;
+
+            border-bottom: 1px silver dashed;
+        }
+
+        .comment-data {
+            font-size: 12px;
+            padding-top: 10px;
+            color: gray;
+            float: right;
+            font-weight: normal;
+            margin-right: 15px;
+        }
+        a{
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+<div th:include="../static/common/headbar::headbar"></div>
+<div th:include="./detail_user::homepage"></div>
+<div style="padding: 20px 550px 10px">
+    <form method="get" action="/user/lostList.do" class="form-inline" id="searchform">
+        <div class="input-group">
+            <input type="text" style="width: 350px" placeholder="输入失物名" class="form-control" name="lostName">
+
+            <span class="input-group-btn">
+                <input type="submit" value="搜索" class="btn btn-default">
+            </span>
+
+        </div>
+    </form>
+</div>
+<div id="add" class="modal fade" data-id="">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-title">
+                <h1 class="text-center">认领资料填写</h1>
+            </div>
+            <div class="modal-body">
+                <form id="form-login">
+                    <div class="form-group has-feedback">
+                        <label for="ad-phone">手机号码</label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-phone"></span></span>
+                            <input id="ad-phone" class="form-control" placeholder="请输入你的手机号码" maxlength="13"
+                                   type="text">
+                        </div>
+                        <span style="color:red;display: none;" class="tips"></span>
+                        <span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                        <span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                    </div>
+
+                    <div class="form-group has-feedback">
+                        <label for="ad-description">失物特征描述</label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-book"></span></span>
+                            <textarea id="ad-description" class="form-control" placeholder="请输入特征描述"
+                                      maxlength="20"></textarea>
+                        </div>
+
+                        <span style="color:red;display: none;" class="tips"></span>
+                        <span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                        <span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                    </div>
+
+                    <div class="form-group has-feedback">
+                        <div class="text-right">
+                            <button class="btn btn-primary" type="button" id="btn-add">添加</button>
+                            <button class="btn btn-danger" data-dismiss="modal">取消</button>
+                        </div>
+
+
+                        <span style="color:red;display: none;" class="tips"></span>
+                        <span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                        <span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default" style="width: 90%;margin-left: 5%">
+    <div class="panel-heading">
+        <h3 class="panel-title" style="text-align:center">失物认领</h3>
+    </div>
+    <div class="panel-body">
+        <table class="table table-hover" style="text-align:center">
+            <thead>
+            <tr>
+                <th>isbn</th>
+                <th>失物名</th>
+                <th>遗失地点</th>
+                <th>拾物时间</th>
+                <th>认领状态</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="lost: ${list.list}">
+                <td th:text="${lost.lostNo}"></td>
+                <td th:text="${lost.lostName}"></td>
+                <td th:text="${lost.address}"></td>
+                <td th:text="${lost.getCreateTimeString()}"></td>
+                <td th:text="${lost.getStatusString()}"></td>
+                <td>
+                    <a href="#">
+                        <button th:if="${lost.getStatus() == 0 }" type="button"
+                                class="btn btn-info" data-toggle="modal" data-target="#add"
+                                th:onclick="'javascript:values('+${lost.id}+')'">申请认领
+                        </button>
+
+                        <button th:if="${lost.getStatus() == 1}" type="button" class="btn btn-info"
+                                style="color: red" disabled>已被认领
+                        </button>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="5">
+                    <a th:if="${list.hasPreviousPage}"
+                       th:href="'/user/lostList.do'+'?page='+${list.getPrePage()}">上一页</a>
+                    <a th:if="${list.hasNextPage}"
+                       th:href="'/user/lostList.do'+'?page='+${list.getNextPage()}">下一页</a>
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    <span><span th:text="${list.getPageNum()}"></span>/<span th:text="${list.getPages()}"></span></span>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+
+<div style="width: 90%;margin-left: 5%;height: 130px">
+    <p>留言板块</p>
+    <textarea id="comment-content-val" class="form-control" style=" resize:none;" rows="3"></textarea>
+    <button class="btn btn-danger" id="comment-btn" style="float: right;margin-top: 10px;">发表留言</button>
+</div>
+
+<div id="comment-list-parent" style="width: 90%;margin-left: 5%;height: 800px">
+    <div id="comment-list" >
+        <!--    <div class="comment-div">-->
+        <!--        <div class="comment-nickname">nick-name</div>-->
+        <!--        <div class="comment-content">内容-->
+        <!--            <div class="comment-data">2020-3-16 15:37</div>-->
+        <!--        </div>-->
+        <!--    </div>-->
+        <!--    <div class="comment-div">-->
+        <!--        <div class="comment-nickname">nick-name</div>-->
+        <!--        <div class="comment-content">内容-->
+        <!--            <div class="comment-data">2020-3-16 15:37</div>-->
+        <!--        </div>-->
+        <!--    </div>-->
+
+
+    </div>
+    <div style="text-align: center">
+        <a id="comment-prePage">上一页</a>
+        <a id="comment-nextPage">下一页</a>
+        &nbsp;
+        &nbsp;&nbsp;
+        <span><span id="pageNum"></span>/<span id="pages"></span></span>
+        <span>总条数:<span id="total"></span></span>
+    </div>
+</div>
+
+
+</body>
+<script>
+    var checkadd = [false];
+    var checkdel = [false];
+
+    var lostId = 0;
+
+    loadComment(1);
+
+
+    function values(val) {
+        $('#add').attr('data-id', val);
+    }
+
+    //校验成功函数
+    function success(Obj, counter, check, offset) {
+        Obj.parent().parent().removeClass('has-error').addClass('has-success');
+        $('.tips').eq(counter + offset).hide();
+        $('.glyphicon-ok').eq(counter + offset).show();
+        $('.glyphicon-remove').eq(counter + offset).hide();
+        check[counter] = true;
+
+    }
+
+    // 校验失败函数
+    function fail(Obj, counter, msg, check, offset) {
+        Obj.parent().parent().removeClass('has-success').addClass('has-error');
+        $('.glyphicon-remove').eq(counter + offset).show();
+        $('.glyphicon-ok').eq(counter + offset).hide();
+        $('.tips').eq(counter + offset).text(msg).show();
+        check[counter] = false;
+    }
+
+
+    //bname
+    $('#add').find('input').eq(0).change(function () {
+        if ($(this).val().length < 11) {
+            fail($(this), 0, '请输入正确的手机号码', checkadd, 0);
+        } else {
+            success($(this), 0, checkadd, 0);
+        }
+    });
+
+    //add
+    $('#btn-add').click(function (e) {
+        if (!checkadd.every(function (value) {
+            return value == true
+        })) {
+            e.preventDefault();
+            for (key in checkadd) {
+                if (!checkadd[key]) {
+                    $('#add').find('input').eq(key).parent().parent().removeClass('has-success').addClass('has-error')
+                }
+            }
+        } else {
+            var phone = document.getElementById("ad-phone").value;
+            var description = document.getElementById("ad-description").value;
+            var lostId = $('#add').attr('data-id');
+            var lostList = {
+                'lostId': parseInt(lostId),
+                'description': description,
+                'userPhone': phone
+            };
+            var JSONdata = JSON.stringify(lostList);
+            $.ajax({
+                type: "post",
+                url: "/applyRecord/user/add.do",
+                data: JSONdata,
+                dataType: "json",
+                contentType: "application/json;charset=UTF-8",
+                success: function (result) {
+                    if (result.code == 200) {
+                        alert(result.data);
+                        $("#ad-phone").val("");
+                        $("#ad-description").val("");
+                        $('#add').modal('hide');
+                    } else {
+                        alert("添加失败");
+                    }
+                }
+            });
+        }
+    });
+
+
+    var hasPreviousPage;
+    var hasNextPage;
+    var prePage;
+    var nextPage;
+    var pageNum = 1;
+    var pages;
+    var total;
+
+
+    //add
+    $('#comment-btn').click(function (e) {
+        var comment_content_val = document.getElementById("comment-content-val").value;
+        if (comment_content_val == "") {
+            alert("留言不允许为空");
+        }
+        $.ajax({
+            type: "post",
+            url: "/comment/commit.do?content=" + comment_content_val,
+            dataType: "json",
+            contentType: "application/json;charset=UTF-8",
+            success: function (result) {
+                if (result.code == 200) {
+                    alert("留言成功");
+                    loadComment(pageNum);
+                    $("#comment_content_val").val("");
+                } else {
+                    alert("添加失败");
+                }
+            }
+        });
+    });
+
+    $("#comment-prePage").click(function () {
+        loadComment(prePage);
+    });
+
+    $("#comment-nextPage").click(function () {
+        loadComment(nextPage);
+    });
+
+    function loadComment(page) {
+        $.ajax({
+            type: "post",
+            url: "/comment/list.do?page=" + page,
+            data: {},
+            dataType: "json",
+            contentType: "application/json;charset=UTF-8",
+            success: function (result) {
+                if (result.code == 200) {
+                    pageNum = result.data.pageNum;
+                    hasPreviousPage = result.data.hasPreviousPage;
+                    hasNextPage = result.data.hasNextPage;
+                    prePage = result.data.prePage;
+                    nextPage = result.data.nextPage;
+                    pages = result.data.pages;
+                    total = result.data.total;
+                    refreshPage();
+
+                    $("#comment-list").html("");
+
+                    $.each(result.data.list, function (i, item) {
+                        var div_parent = $("<div class=\"comment-div\"></div>");
+                        var div_parent_1 = $("<div class=\"comment-nickname\">" + item.userName + "</div></div>");
+                        var div_parent_2 = $("<div class=\"comment-content\">" + item.content + "</div></div>");
+                        var div_parent_3 = $("<div class=\"comment-data\">" + item.date + "</div></div>");
+
+                        $(div_parent_2).append($(div_parent_3));
+                        $(div_parent_1.append($(div_parent_2)));
+                        $(div_parent.append($(div_parent_1)));
+
+                        $("#comment-list").append($(div_parent));
+                    })
+                } else {
+                    alert("获取失败");
+                }
+            }
+        });
+    }
+
+    function refreshPage() {
+        if (hasPreviousPage) {
+            $('#comment-prePage').show();
+        } else {
+            $('#comment-prePage').hide();
+        }
+
+        if (hasNextPage) {
+            $('#comment-nextPage').show();
+        } else {
+            $('#comment-nextPage').hide();
+        }
+
+        $('#pageNum').html(pageNum);
+
+        $('#pages').html(pages === 0 ? 1 : pages);
+        $('#total').html(total);
+    }
+
+
+</script>
+</html>
